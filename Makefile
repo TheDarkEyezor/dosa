@@ -2,13 +2,13 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -Wall -Wextra -pedantic -std=c++11
+CXXFLAGS = -Wall -Wextra -pedantic -std=c++17
 
 # Target executable
 TARGET = alarm_app
 
 # Source files
-SRC = main.cpp alarm.cpp
+SRC = main.cpp alarm.cpp timeparser.cpp 
 
 # Default target
 all: $(TARGET)

@@ -35,7 +35,7 @@ int alarm::execute () {
   std::cout << "Alarm set for " << hour << ":" << (minute < 10 ? "0" : "") << minute 
             << ". Waiting " << seconds_to_alarm << " seconds..." << std::endl;
 
-  std::this_thread::sleep_for(std::chrono::seconds(seconds_to_alarm));
+  std::this_thread::sleep_for(std::chrono::seconds(seconds_to_alarm - 12));
   trigger_alarm_notification();
   return 0;
 }
@@ -43,5 +43,10 @@ int alarm::execute () {
 int alarm::init(int hour, int minute) {
   this->hour = hour;
   this->minute = minute;
+  return 0;
+}
+
+int alarm::init(int hour) {
+  init(hour, 0);
   return 0;
 }

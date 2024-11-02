@@ -3,51 +3,65 @@
 #include <string>
 #include <thread>
 #include "alarm.hpp"
+#include "timeParser.cpp"
 
+using namespace std;
 
 // Function to parse command and extract hour and minute
-Command* parse_command(const std::string& command) {
-    std::istringstream stream(command);
-    std::string temp;
+Command* parse_command(const string& command) {
 
-    // Parsing "set an alarm for HH:MM today"
-    while (stream >> temp) {
-        if (temp.find(':') != std::string::npos) {
-            size_t colon_pos = temp.find(':');
-            int hour = std::stoi(temp.substr(0, colon_pos));
-            int minute = std::stoi(temp.substr(colon_pos + 1));
-            alarm* newAlarm = new alarm();
-            newAlarm->init(hour, minute);
-            return newAlarm;
-        }
+  if (command.find("alarm") != string::npos) {
+    auto result = TimeParser::parse(command);
+    alarm* newAlarm = new alarm();
+
+    if (result->minutes.has_value()) {
+      if (result->minutes.has_value())
+        newAlarm->init(result->hour, result->minutes.value());
+      else 
+        newAlarm->init(result->hour);
+      return newAlarm;
+    } else {
+      cout << "alarm command recognised, but invalid format" << endl;
     }
-    return nullptr;
+  } else if (command.find("exit") != string::npos) {
+    cout << "EEXXIITTIINNGG PPRROOGGRRAAMM!!" << endl;
+    exit(0);
+  } else {
+    cout << "only accepting alarm commands rn" << endl;
+  }
+  return nullptr;
 }
 
 int main() {
-    std::string command;
-    std::cout << "Enter your command: ";
-    std::getline(std::cin, command);
+  while (true) {
 
-    Command *newCommand = parse_command(command);
-    // // Start alarm in a separate thread
-    std::thread alarm_thread(&Command::execute, newCommand);
+  string command;
+  cout << "Enter your command: ";
+  getline(cin, command);
+  Command *newCommand = parse_command(command);
+  // // Start alarm in a separate thread
 
-    // // Detach the alarm thread so it runs independently
-    alarm_thread.detach();
+  if (!newCommand) {
+    continue;
+  }
 
-    // Main thread can do other tasks here
-    std::cout << "Alarm is set. Main program is free to do other tasks." << std::endl;
-    
-    // Example of another task in the main program
-    for (int i = 1; i <= 60; ++i) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        std::cout << "Main program working... (" << i << "s)\n";
+  thread alarm_thread(&Command::execute, newCommand);
 
-    }
-    // } else {
-    //     std::cout << "Failed to parse command. Please use format 'set an alarm for HH:MM today'." << std::endl;
-    // }
+  // // Detach the alarm thread so it runs independently
+  alarm_thread.detach();
 
-    return 0;
+  // Main thread can do other tasks here
+  cout << "Alarm is set. Main program is free to do other tasks." << endl;
+  
+  // Example of another task in the main program
+  for (int i = 1; i <= 60; ++i) {
+      this_thread::sleep_for(chrono::seconds(1));
+      cout << "Main program working... (" << i << "s)\n";
+
+  }
+  // } else {
+  //     cout << "Failed to parse command. Please use format 'set an alarm for HH:MM today'." << endl;
+  // }
+  }
+  return 0;
 }

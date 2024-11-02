@@ -12,6 +12,7 @@ class alarm: public Command{
     
   public:
     int init (int hour, int minute);
+    int init (int hour);
     int execute () override;
 };
 
