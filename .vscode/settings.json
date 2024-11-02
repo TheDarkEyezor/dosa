@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.scss": "\"postcss\"",
+    "string": "cpp",
+    "chrono": "cpp"
+  }
+}
