@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -pedantic -std=c++17
 
 # Target executable
-TARGET = alarm_app
+TARGET = dosa
 
 # Source files
 SRC = main.cpp alarm.cpp timeparser.cpp 

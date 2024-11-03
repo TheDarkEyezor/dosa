@@ -14,6 +14,7 @@ class alarm: public Command{
     int init (int hour, int minute);
     int init (int hour);
     int execute () override;
+    void display() override;
 };
 
 #endif
